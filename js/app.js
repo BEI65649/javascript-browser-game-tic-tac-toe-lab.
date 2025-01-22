@@ -40,18 +40,18 @@ const updateBoard = () => {
            squareEls[idx].textContent = 'X'  
         } else if (sqrValue === "O"){
             squareEls[idx].textContent = 'O'
-        } else{ squareEls.textContent = ' ' }  
+        } else{ squareEls[idx].textContent = '' }  
      });
 }
 
 const updateMessage = () => {
     if (winner === false && tie === false) {
-        messageEl.textContent = "it's Player X's turn"
+        messageEl.textContent = `It's Player ${turn}'s turn`
     } else if (winner === false && tie === true) {
         messageEl.textContent = "it's a tie"
     } else {
         // messageEl.textContent = "Player 0 Victory"
-        messageEl.textContent = "Player" + turn + "Victory";
+        messageEl.textContent = "Player " + turn + " Victory";
     }
 }
 
@@ -68,6 +68,7 @@ const init = () => {
     winner = false
     tie = false
     render()
+    console.log(board)
 }
 
 init()
@@ -123,19 +124,19 @@ checkForWinner = () => {
 // }
 
 
-checkForTie = (squareIdx) => {
-    if (winner === true) {
-        return;
-    } else if (board[squareIdx] !== "") {
-        tie = true
-        // console.log(tie)
-    }
-    // checkForTie = (squareIdx) => {
-    //     if (winner === true) {
-    //         return;
-    //     } else if (!board.includes("")) {
-    //         tie = true;
-    //     }
+// heckForTie = (squareIdx) => {c
+    // if (winner === true) {
+    //     return;
+    // } else if (board[squareIdx] !== "") {
+    //     tie = true
+    //     // console.log(tie)
+    
+    checkForTie = (squareIdx) => {
+        if (winner === true) {
+            return;
+        } else if (!board.includes("")) {
+            tie = true;
+        }
 }
 
 switchPlayerTurn = () => {
