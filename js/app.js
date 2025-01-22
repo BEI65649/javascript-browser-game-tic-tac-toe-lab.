@@ -24,7 +24,10 @@ let tie
 
 /*------------------------ Cached Element References ------------------------*/
 const squareEls = document.querySelectorAll('.sqr');
-const messageEl = document.querySelector('#message');// event listeners are tied to cached elements
+const messageEl = document.querySelector('#message');
+const resetBtnEl = document.getElementById('reset');   
+// 
+// event listeners are tied to cached elements
 // console.log(squareEls);
 // console.log(messageEl);
 
@@ -43,18 +46,19 @@ const updateBoard = () => {
 
 const updateMessage = () => {
     if (winner === false && tie === false) {
-        return "it's Player X's turn"
+        messageEl.textContent = "it's Player X's turn"
     } else if (winner === false && tie === true) {
-        return "it's a tie"
+        messageEl.textContent = "it's a tie"
     } else {
-        return "Player 0 Victory"
+        // messageEl.textContent = "Player 0 Victory"
+        messageEl.textContent = "Player" + turn + "Victory";
     }
 }
 
 
 const render = () => {
-    updateBoard()
-    updateMessage()
+    updateBoard();
+    updateMessage();
 }
 
 const init = () => {
@@ -72,7 +76,7 @@ const handleClick = (event) => {
     const squareIdx = event.target.id
     console.log(squareIdx, "square idx const works")
     const isFilled = board[squareIdx] !== ''
-    if(isFilled || winner){
+    if(isFilled || winner) {
         return 
     }
     placePiece(squareIdx)
@@ -85,14 +89,14 @@ const handleClick = (event) => {
 const placePiece = (squareIdx) => {
     board[squareIdx] = turn
 
-    console.log(board)
+    // console.log(board)
 }
 
 checkForWinner = () => {
     for (let i = 0; i < winningCombos.length; i++)
         if (board[winningCombos[i][0]] && board[winningCombos[i][0]] === board[winningCombos[i][1]] && board[winningCombos[i][0]] === board[winningCombos[i][2]]) {
             winner = true
-            console.log(winner)
+            // console.log(winner)
         }
 }
 
@@ -123,9 +127,15 @@ checkForTie = (squareIdx) => {
     if (winner === true) {
         return;
     } else if (board[squareIdx] !== "") {
-        tie = false
-        console.log(tie)
+        tie = true
+        // console.log(tie)
     }
+    // checkForTie = (squareIdx) => {
+    //     if (winner === true) {
+    //         return;
+    //     } else if (!board.includes("")) {
+    //         tie = true;
+    //     }
 }
 
 switchPlayerTurn = () => {
@@ -147,5 +157,5 @@ switchPlayerTurn = () => {
 squareEls.forEach((square) => {
     square.addEventListener('click', handleClick)
 })
-
+resetBtnEl.addEventListener('click', init)
 
