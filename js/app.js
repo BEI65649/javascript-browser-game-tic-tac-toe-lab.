@@ -11,37 +11,40 @@ const winningCombos = [
     [2, 5, 8],
     [0, 4, 8],
     [2, 4, 6],
-  ]
-  
+]
+
 
 
 /*---------------------------- Variables (state) ----------------------------*/
 let board
-let turn 
+let turn
 let winner
-let tie 
+let tie
 
 
 /*------------------------ Cached Element References ------------------------*/
 const squareEls = document.querySelectorAll('.sqr');
-const messageEl = document.querySelector('#message');
-console.log(squareEls);
-console.log(messageEl);
+const messageEl = document.querySelector('#message');// event listeners are tied to cached elements
+// console.log(squareEls);
+// console.log(messageEl);
 
 
 /*-------------------------------- Functions --------------------------------*/
 
 const updateBoard = () => {
     board.forEach((sqrValue, idx) => {
-        const square = squareEls[idx];
-        square.textContent =sqrValue
-});
+        if (sqrValue === 'X'){
+           squareEls[idx].textContent = 'X'  
+        } else if (sqrValue === "O"){
+            squareEls[idx].textContent = 'O'
+        } else{ squareEls.textContent = ' ' }  
+     });
 }
 
 const updateMessage = () => {
-    if(winner === false && tie === false) {
+    if (winner === false && tie === false) {
         return "it's Player X's turn"
-    } else if(winner === false && tie === true) {
+    } else if (winner === false && tie === true) {
         return "it's a tie"
     } else {
         return "Player 0 Victory"
@@ -55,12 +58,12 @@ const render = () => {
 }
 
 const init = () => {
-console.log('Init') 
-board = ["x", "o", "", "", "", "", "", "", ""]
-turn = "x"
-winner = false
-tie = false 
-render () 
+    console.log('Init')
+    board = ["", "", "", "", "", "", "", "", ""]
+    turn = "X"
+    winner = false
+    tie = false
+    render()
 }
 
 init()
@@ -68,47 +71,81 @@ init()
 const handleClick = (event) => {
     const squareIdx = event.target.id
     console.log(squareIdx, "square idx const works")
-
-    if(board[squareIdx === "X"] || board[squareIdx] === "O" || winner) {
-        return;
-}
-placePiece(squareIdx)
-checkForWinner()
-checkForTie()
-switchPlayerTurn()
+    const isFilled = board[squareIdx] !== ''
+    if(isFilled || winner){
+        return 
+    }
+    placePiece(squareIdx)
+    checkForWinner()
+    checkForTie()
+    switchPlayerTurn()
+    render()
 }
 
 const placePiece = (squareIdx) => {
     board[squareIdx] = turn
+
     console.log(board)
 }
 
 checkForWinner = () => {
-    for (let i = 0; i < winningCombos.length; i++) 
-        if(board[winningCombos[i][0]] && board[winningCombos[i][0]] === board[winningCombos[i][1]] && board[winningCombos[i][0]] === board[winningCombos[i][2]]) {
+    for (let i = 0; i < winningCombos.length; i++)
+        if (board[winningCombos[i][0]] && board[winningCombos[i][0]] === board[winningCombos[i][1]] && board[winningCombos[i][0]] === board[winningCombos[i][2]]) {
             winner = true
-        console.log(winner)
+            console.log(winner)
         }
-} 
+}
+
+// const checkWinner = () => {
+//     for (let combo of winningCombos) {
+//         const [a, b, c] = combo; // Destructure the winning combo indices
+//         if (
+//             board[a] !== "" && // Check if the first position is not empty
+//             board[a] === board[b] && // Check if the first equals the second
+//             board[a] === board[c] // Check if the first equals the third
+//         ) {
+//             winner = true;
+//             console.log(`Winner found! Player ${board[a]} wins.`);
+//             break;
+//         }
+//     }
+// };
+
+// // Run the winner check
+// checkWinner();
+
+// if (!winner) {
+//     console.log("No winner yet.");
+// }
+
 
 checkForTie = (squareIdx) => {
-    if(winner === true) {
+    if (winner === true) {
         return;
-    } else if(board[squareIdx] !== "") {
+    } else if (board[squareIdx] !== "") {
         tie = false
         console.log(tie)
-    }  
+    }
 }
 
 switchPlayerTurn = () => {
-    if(winner === true) {
+    if (winner === true) {
         return;
-    } else if(winner === false) {
-        turn = "O"
-        console.log(turn)
-    }   
+
+    } 
+    
+    if (turn === 'X') {
+        turn = 'O' 
+    
+        // console.log(turn)
+    } else {
+        turn = 'X'
+    }
 }
 /*----------------------------- Event Listeners -----------------------------*/
 
+squareEls.forEach((square) => {
+    square.addEventListener('click', handleClick)
+})
 
 
